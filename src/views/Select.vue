@@ -1,31 +1,48 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col sm="auto" >
-        <b-nav class="flex-column" >
-          <h3 style="width:9em">List of player:</h3>
-          <draggable class="list-group" :list="remain" group="people" @change="log">
-              <Player v-for="(element) in remain" :key="element.name" :player="element">
-                <template v-slot:badge><b-icon-music-note></b-icon-music-note></template>
-              </Player>
+      <b-col md="auto" style="min-width: 15rem;">
+        <b-card no-body>
+          <template v-slot:header>
+            <h4>List of player:</h4>
+          </template>
+          <draggable
+            tag="b-list-group"
+            class="list-group-flush"
+            :list="remain"
+            group="people"
+            @change="log"
+          >
+            <Player v-for="(element) in remain" :key="element.name" :player="element"></Player>
           </draggable>
-        </b-nav>
+        </b-card>
       </b-col>
       <b-col>
-        <b-row>
-          <b-col sm="auto" v-for="(list,index) in groups" :list="list" :key="index">
-            <h3 style="width:9em; max-width:20em">
-              <XEditable v-model="list.name" />
-            </h3>
-            <draggable class="list-group" :list="list.players" group="people" @change="log">
-                <Player class="list-group-item"
-                v-for="(element, index) in list.players"
-                :key="element.name" :player="element">
-                  <template v-slot:badge>t{{ index+1 }}</template>
-                </Player>
-            </draggable>
-          </b-col>
-        </b-row>
+        <b-card-group deck>
+            <b-card no-body style="min-width: 15rem;" v-for="(list,index) in groups" :list="list" :key="index" class="mb-2">
+              <template v-slot:header>
+                <h4>
+                  <XEditable v-model="list.name" class="clear-line-height" />
+                </h4>
+              </template>
+                <draggable
+                  tag="b-list-group"
+                  class="list-group-flush"
+                  :list="list.players"
+                  group="people"
+                  @change="log"
+                >
+                  <Player
+                    class="list-group-item"
+                    v-for="(element, index) in list.players"
+                    :key="element.name"
+                    :player="element"
+                  >
+                    <template v-slot:badge>t{{ index+1 }}</template>
+                  </Player>
+                </draggable>
+            </b-card>
+        </b-card-group>
       </b-col>
     </b-row>
   </b-container>
@@ -54,7 +71,7 @@ export default {
       ? [...this.$route.params.list]
       : [{ name: "arily", id: 1123053 }];
     return {
-      col:3,
+      col: 3,
       remain,
       groups
     };
@@ -67,3 +84,19 @@ export default {
   }
 };
 </script>
+<style >
+  .clear-line-height{
+    line-height: 2rem;
+  }
+  .vue-xeditable-form-control {
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #555;
+    background-color: transparent;
+    background-image: none;
+    border-bottom:1px dotted #999;
+    outline: none;
+    width: 100%;
+}
+</style>
