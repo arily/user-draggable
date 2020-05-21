@@ -108,3 +108,4 @@ dist
 dist/
 
 user-draggable.zip
+.idea/workspace.xml

@@ -70,7 +70,8 @@ export default {
     ready: false,
     loading: false,
     appendNotice: "",
-    validNotice: ""
+    validNotice: "",
+      userElo: {},
   }),
   computed: {
     forShow_Listed: function() {
@@ -98,7 +99,10 @@ export default {
         } catch (e) {
           return undefined;
         }
-        console.log({ name: user.name, id: user.id });
+        let elo = await fetch(`http://47.101.168.165:5005/api/users/elo/${id}`)
+            .then(res=> res.json())
+            .then(res=>user.elo = res.elo).catch(()=>0);
+        console.log({ name: user.name, id: user.id, elo: elo});
         this.cacheUsers.push(user);
         return user;
       }
