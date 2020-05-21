@@ -9,8 +9,10 @@ import Vuetify from "vuetify";
 import AsyncComputed from 'vue-async-computed'
 
 import "vuetify/dist/vuetify.min.css"; 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import "./styles/style.scss";
+import "bootswatch/dist/darkly/bootstrap.min.css"; 
 
 Vue.use(AsyncComputed)
 // Vue.use(router); 

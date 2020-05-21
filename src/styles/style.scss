@@ -1,0 +1,12 @@
+$body-bg: rgba(48, 48, 48, 0.6);
+$body-color: white;
+.themedark {
+    --dark: rgba(48, 48, 48, 0.6);
+    --light: rgba(68, 68, 68, 0.6);
+    --input-bg: rgba(88,88,88,0.6);
+    --input: $body-color;
+}
+// Bootstrap and its default variables
+@import '../../node_modules/bootstrap/scss/bootstrap';
+// BootstrapVue and its default variables
+@import '../../node_modules/bootstrap-vue/src/index.scss';

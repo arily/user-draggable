@@ -10,7 +10,9 @@
   "dependencies": {
     "@onekiloparsec/vue-xeditable": "^1.2.10",
     "bootstrap-vue": "^2.1.0",
+    "bootswatch": "^4.5.0",
     "core-js": "^3.6.4",
+    "lodash": "^4.17.15",
     "node-osu": "^2.2.0",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2",
