@@ -21,9 +21,10 @@
         <b-card-group deck>
             <b-card no-body style="min-width: 15rem;" v-for="(list,index) in groups" :list="list" :key="index" class="mb-2">
               <template v-slot:header>
-                <h4>
-                  <XEditable v-model="list.name" class="clear-line-height" />
-                </h4>
+                <h3 id="TeamName">
+                  <XEditable v-model="list.name" class="clear-line-height"/>
+                </h3>
+                <h6 style="font-weight: lighter; color: indianred">AvgElo: {{groupAvgElo[list.name]}}</h6>
               </template>
                 <draggable
                   tag="b-list-group"
@@ -38,7 +39,7 @@
                     :key="element.name"
                     :player="element"
                   >
-                    <template v-slot:badge>t{{ index+1 }}</template>
+                    <template v-slot:badge>{{tierGroup[index]}}</template>
                   </Player>
                 </draggable>
             </b-card>
@@ -65,7 +66,7 @@ export default {
     const groupsCount = this.$route.params.groupSize || 8;
     const groups = [];
     for (let i = 0; i < groupsCount; i++) {
-      groups.push({ name: `group${i + 1}`, players: [] });
+      groups.push({ name: `Group${i + 1}`, players: []});
     }
     const remain = this.$route.params.list
       ? [...this.$route.params.list]
@@ -73,9 +74,24 @@ export default {
     return {
       col: 3,
       remain,
-      groups
+      groups,
+        tierGroup: ['Cap', 'Vice', 'T1', 'T2', 'T3', 'T4','T5']
     };
+
   },
+    computed:{
+      groupAvgElo: function () {
+          let avgElo = {};
+          this.groups.forEach(group=>{
+              let total = 0
+              group.players.forEach(player=>{
+                  total += player.elo
+              })
+              avgElo[group.name] = group.players.length ? Math.round(total / group.players.length): 0
+          })
+          return avgElo
+      }
+    },
   props: ["initPlayers"],
   methods: {
     log: function(evt) {
@@ -87,6 +103,10 @@ export default {
 <style >
   .clear-line-height{
     line-height: 2rem;
+    color: gray;
+    text-align: center;
+    font-weight: bold;
+
   }
   .vue-xeditable-form-control {
     padding: 0;
@@ -98,5 +118,5 @@ export default {
     border-bottom:1px dotted #999;
     outline: none;
     width: 100%;
-}
+    }
 </style>
