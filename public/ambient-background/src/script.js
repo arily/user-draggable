@@ -23,9 +23,9 @@ var ParticleEngine = (function () {
 		{ id: "medium", num: 20, fromX: 0, toX: this.totalWidth, ballwidth: 8, alphamax: 0.3, areaHeight: 1, color: "#6fd2f3", fill: true },
 		{ id: "large", num: 10, fromX: 0, toX: this.totalWidth, ballwidth: 30, alphamax: 0.2, areaHeight: 1, color: "#93e9f3", fill: true }];
 		this.particleArray = [];
-		this.lights = [{ ellipseWidth: 400, ellipseHeight: 100, alpha: 0.2, offsetX: 0, offsetY: 0, color: "#6ac6e8" },
-		{ ellipseWidth: 350, ellipseHeight: 250, alpha: 0.3, offsetX: -50, offsetY: 0, color: "#54d5e8" },
-		{ ellipseWidth: 100, ellipseHeight: 80, alpha: 0.2, offsetX: 80, offsetY: -50, color: "#2ae8d8" }];
+		// this.lights = [{ ellipseWidth: 400, ellipseHeight: 100, alpha: 0.2, offsetX: 0, offsetY: 0, color: "#6ac6e8" },
+		// { ellipseWidth: 350, ellipseHeight: 250, alpha: 0.3, offsetX: -50, offsetY: 0, color: "#54d5e8" },
+		// { ellipseWidth: 100, ellipseHeight: 80, alpha: 0.2, offsetX: 80, offsetY: -50, color: "#2ae8d8" }];
 
 		this.stage.compositeOperation = _ParticleEngine.compositeStyle;
 
@@ -119,7 +119,7 @@ var ParticleEngine = (function () {
 			TweenMax.to(ball, speed / 2, { alpha: 0 });
 		}
 
-		drawBgLight();
+		// drawBgLight();
 		drawParticles();
 	}
 
