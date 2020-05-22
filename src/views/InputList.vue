@@ -34,20 +34,12 @@
                 Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
             </h4>
         </span>
-        <router-link
-            v-if="ready"
-            :to="{
-            name:'Select',
-            params:{
-                list: players,
-                groupSize,
-            },
-        }"
-        >
-            <b-button :disabled="loading" class="mb-2">去分组11111</b-button>
-        </router-link>
+        <b-button-group class="mb-2">
+            <b-button @click.prevent="idList" variant="light">手动触发列表更新!!</b-button>
+            <b-button @click.prevent="toSelect" :disabled="!ready" variant="success">去分组11111</b-button>
+        </b-button-group>
         <b-row>
-            <b-col v-for="(chunk,index) in forShow_Chunked" :key="`player-chunk-${index}`" >
+            <b-col v-for="(chunk,index) in forShow_Chunked" :key="`player-chunk-${index}`">
                 <b-list-group>
                     <Player v-for="player in chunk" :key="player.id" :player="player" />
                 </b-list-group>
@@ -57,7 +49,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from "lodash";
 import Player from "../components/player.vue";
 const node_osu = require("node-osu");
 const i = new node_osu.Api("A3tGREAemXk213gfJJUewH9675g", {
@@ -84,6 +76,7 @@ export default {
         validNotice: "",
         userElo: {},
         showUserChunk: 3,
+        timeouts: {}
     }),
     computed: {
         forShow_Listed() {
@@ -93,21 +86,25 @@ export default {
                     return user;
                 })
                 .filter(user => user);
-        },
-        forShow_Chunked(){
-          const chunked = _.chunk(this.forShow_Listed, Math.ceil(this.forShow_Listed.length / this.showUserChunk ));
-          if (chunked.length > this.showUserChunk){
-            const leftover = chunked.pop();
-            leftover.map((player,index) => {
-              index = index % (this.showUserChunk - 1);
-              chunked[index].push(player)
-            });
-          }
-          console.log(chunked.length);
-          return chunked;
         }
     },
-    asyncComputed: {},
+    asyncComputed: {
+        forShow_Chunked() {
+            const chunked = _.chunk(
+                this.forShow_Listed,
+                Math.ceil(this.forShow_Listed.length / this.showUserChunk)
+            );
+            if (chunked.length > this.showUserChunk) {
+                const leftover = chunked.pop();
+                leftover.map((player, index) => {
+                    index = index % (this.showUserChunk - 1);
+                    chunked[index].push(player);
+                });
+            }
+            console.log(chunked.length);
+            return chunked;
+        }
+    },
     methods: {
         async getUser({ id }) {
             if (id) {
@@ -122,19 +119,29 @@ export default {
                             .then(res => res[0])
                             .catch(() => undefined)
                     );
+                    const elo = await fetch(
+                        `http://47.101.168.165:5005/api/users/elo/${id}`
+                    )
+                        .then(res => res.json())
+                        .then(res => (user.elo = res.elo))
+                        .catch(() => 0);
+                    console.log({ name: user.name, id: user.id, elo: elo });
+                    this.cacheUsers.push(user);
+                    return user;
                 } catch (e) {
                     return undefined;
                 }
-                let elo = await fetch(
-                    `http://47.101.168.165:5005/api/users/elo/${id}`
-                )
-                    .then(res => res.json())
-                    .then(res => (user.elo = res.elo))
-                    .catch(() => 0);
-                console.log({ name: user.name, id: user.id, elo: elo });
-                this.cacheUsers.push(user);
-                return user;
             }
+        },
+        async toSelect() {
+            await this.fetchPlayers();
+            this.$router.push({
+                name: "Select",
+                params: {
+                    list: this.players,
+                    groupSize: this.groupSize
+                }
+            });
         },
         async fetchPlayers() {
             this.ready = false;
@@ -164,12 +171,16 @@ export default {
     },
     watch: {
         idInput() {
-            let idList = this.idInput.split("\n");
-            this.idList = idList.filter(this.onlyUnique);
-            if (idList.length > this.idList.length) {
-                this.idInputState = true;
-                this.validNotice = `列表疵了。有重复的id！！不过我给你删了。`;
-            }
+            //lazy not working wtf
+            if (this.timeouts.idInput) clearTimeout(this.timeouts.idInput);
+            this.timeouts.idInput = setTimeout(() => {
+                const idList = this.idInput.split("\n");
+                this.idList = idList.filter(this.onlyUnique);
+                if (idList.length > this.idList.length) {
+                    this.idInputState = true;
+                    this.validNotice = `列表疵了。有重复的id！！不过我给你删了。`;
+                }
+            }, 500);
         },
         idList() {
             if (this.idInputState) this.fetchPlayers();
