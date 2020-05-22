@@ -32,7 +32,7 @@
 
         </span>-->
         <b-button-group class="mb-2">
-            <b-button @click.prevent="idList" variant="light">手动触发列表更新!!</b-button>
+            <b-button @click.prevent="idListUpdate" variant="light">手动触发列表更新!!</b-button>
             <b-button @click.prevent="toSelect" :disabled="!ready" variant="success" id="buttonsForSelect">去分组11111</b-button>
         </b-button-group>
         <b-tooltip target="buttonsForSelect" :show.sync="loading" triggers="manual">
@@ -41,19 +41,12 @@
                 Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
             </h6>
         </b-tooltip>
-        <b-row>
-            <b-col v-for="(chunk,index) in forShow_Chunked" :key="`player-chunk-${index}`">
-                <b-list-group>
-                    <Player v-for="player in chunk" :key="player.id" :player="player" />
-                </b-list-group>
-            </b-col>
-        </b-row>
+            <chunked-user :list="forShow_Listed" :chunk="showUserChunk"></chunked-user>
     </b-container>
 </template>
 
 <script>
-import _ from "lodash";
-import Player from "../components/player.vue";
+import ChunkedUser from "../components/ChunkedUser.vue";
 const node_osu = require("node-osu");
 const i = new node_osu.Api("A3tGREAemXk213gfJJUewH9675g", {
     // baseUrl: sets the base api url (default: https://osu.ppy.sh/api)
@@ -89,23 +82,6 @@ export default {
                     return user;
                 })
                 .filter(user => user);
-        }
-    },
-    asyncComputed: {
-        forShow_Chunked() {
-            const chunked = _.chunk(
-                this.forShow_Listed,
-                Math.ceil(this.forShow_Listed.length / this.showUserChunk)
-            );
-            if (chunked.length > this.showUserChunk) {
-                const leftover = chunked.pop();
-                leftover.map((player, index) => {
-                    index = index % (this.showUserChunk - 1);
-                    chunked[index].push(player);
-                });
-            }
-            console.log(chunked.length);
-            return chunked;
         }
     },
     methods: {
@@ -165,6 +141,9 @@ export default {
             this.players = rtn;
             return rtn;
         },
+        idListUpdate(){
+          if (this.idInputState) this.fetchPlayers();
+        },
         onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         },
@@ -186,7 +165,7 @@ export default {
             }, 500);
         },
         idList() {
-            if (this.idInputState) this.fetchPlayers();
+            this.idListUpdate();
         },
         groupSize(val) {
             if (val > 1) this.groupSizeState = true;
@@ -194,7 +173,7 @@ export default {
         }
     },
     components: {
-        Player
+        ChunkedUser
     }
 };
 </script>

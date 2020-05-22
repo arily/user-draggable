@@ -6,6 +6,11 @@
                     <template v-slot:header>
                         <h4>List of player:</h4>
                     </template>
+                    <b-form-input
+                        v-model="searchUserText"
+                        placeholder="Enter your name"
+                        style="background-color: var(--light); color: var(--input); backdrop-filter: blur(10px);"
+                    ></b-form-input>
                     <draggable
                         tag="b-list-group"
                         class="list-group-flush"
@@ -14,7 +19,12 @@
                         style="height:100%"
                         @change="log"
                     >
-                        <Player v-for="(element) in remain" :key="element.name" :player="element"></Player>
+                        <Player
+                            v-for="(element) in remain"
+                            :key="element.name"
+                            :player="element"
+                            :show="hitUserSearch(element)"
+                        ></Player>
                     </draggable>
                 </b-card>
             </b-col>
@@ -51,9 +61,9 @@
                                 <template v-slot:badge>{{getRoleFromArrayIndex(index)}}</template>
                             </Player>
                         </draggable>
-                            <!-- <h6
+                        <!-- <h6
                                 style="font-weight: lighter; color: indianred"
-                            >AvgElo: {{groupAvgElo[list.name]}}</h6> -->
+                        >AvgElo: {{groupAvgElo[list.name]}}</h6>-->
                     </b-card>
                 </b-card-group>
             </b-col>
@@ -74,7 +84,7 @@ export default {
         draggable,
         XEditable,
         Player,
-        KVList,
+        KVList
     },
     data() {
         const groupsCount = this.$route.params.groupSize || 8;
@@ -89,11 +99,12 @@ export default {
             col: 3,
             remain,
             groups,
-            tierGroup: ["Cap", "Vice"]
+            tierGroup: ["Cap", "Vice"],
+            searchUserText: ""
         };
     },
     computed: {
-        groupAvgElo: function() {
+        groupAvgElo() {
             let avgElo = {};
             this.groups.map(group => {
                 let total = 0;
@@ -109,11 +120,14 @@ export default {
     },
     props: ["initPlayers"],
     methods: {
-        log: function(evt) {
+        log(evt) {
             window.console.log(evt);
         },
-        getRoleFromArrayIndex(index){
-          return this.tierGroup[index] || `T${index - 1}`
+        getRoleFromArrayIndex(index) {
+            return this.tierGroup[index] || `T${index - 1}`;
+        },
+        hitUserSearch(user){
+          return user.name.toLowerCase().includes(this.searchUserText.toLowerCase())
         }
     }
 };

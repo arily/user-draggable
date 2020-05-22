@@ -1,5 +1,5 @@
 <template>
-    <b-list-group-item class="d-flex justify-content-between align-items-center slim">
+    <b-list-group-item class="d-flex justify-content-between align-items-center slim" v-if="show">
         <b-avatar class="mr-3" :src="avatarSrc"></b-avatar>
         <span class="mr-auto">{{player.name}}</span>
         <b-badge>
@@ -11,9 +11,19 @@
 <script>
 export default {
     name: "User",
-    props: ["player"],
+    props: {
+      player : {
+        type: Object,
+        default : () => ({id: -1, name: 'fucked'})
+      },
+      show: {
+        type: Boolean,
+        default: true,
+      }
+    },
     computed: {
-        avatarSrc: function() {
+
+        avatarSrc() {
             return `https://a.ppy.sh/${this.player.id}`;
         }
     }
