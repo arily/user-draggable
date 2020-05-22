@@ -1,10 +1,8 @@
 <template>
     <b-list-group-item class="d-flex justify-content-between align-items-center slim" v-if="show">
-        <b-avatar class="mr-3" :src="avatarSrc"></b-avatar>
-        <span class="mr-auto">{{player.name}}</span>
-        <b-badge>
-            <slot name="badge"></slot>
-        </b-badge>
+        <slot name="avatar"><b-avatar class="mr-3" :src="avatarSrc"></b-avatar></slot>
+        <slot name="username"><span class="mr-auto">{{player.name}}</span></slot>
+        <slot name="badges"></slot>
     </b-list-group-item>
 </template>
 
@@ -19,7 +17,7 @@ export default {
       show: {
         type: Boolean,
         default: true,
-      }
+      },
     },
     computed: {
 

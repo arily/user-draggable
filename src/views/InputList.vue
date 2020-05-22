@@ -33,7 +33,12 @@
         </span>-->
         <b-button-group class="mb-2">
             <b-button @click.prevent="idListUpdate" variant="light">手动触发列表更新!!</b-button>
-            <b-button @click.prevent="toSelect" :disabled="!ready" variant="success" id="buttonsForSelect">去分组11111</b-button>
+            <b-button
+                @click.prevent="toSelect"
+                :disabled="!ready"
+                variant="success"
+                id="buttonsForSelect"
+            >去分组11111</b-button>
         </b-button-group>
         <b-tooltip target="buttonsForSelect" :show.sync="loading" triggers="manual">
             <h6 class="d-flex align-self-center">
@@ -41,7 +46,7 @@
                 Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
             </h6>
         </b-tooltip>
-            <chunked-user :list="forShow_Listed" :chunk="showUserChunk"></chunked-user>
+        <chunked-user :list="forShow_Listed" :chunk="showUserChunk"></chunked-user>
     </b-container>
 </template>
 
@@ -114,6 +119,7 @@ export default {
         },
         async toSelect() {
             await this.fetchPlayers();
+            this.players.sort((a, b) => b.elo - a.elo);
             this.$router.push({
                 name: "Select",
                 params: {
@@ -141,8 +147,8 @@ export default {
             this.players = rtn;
             return rtn;
         },
-        idListUpdate(){
-          if (this.idInputState) this.fetchPlayers();
+        idListUpdate() {
+            if (this.idInputState) this.fetchPlayers();
         },
         onlyUnique(value, index, self) {
             return self.indexOf(value) === index;

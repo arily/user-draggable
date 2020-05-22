@@ -24,7 +24,11 @@
                             :key="element.name"
                             :player="element"
                             :show="hitUserSearch(element)"
-                        ></Player>
+                        >
+                            <template v-slot:badges>
+                                <list-badge :list="generateBadges(element)"></list-badge>
+                            </template>
+                        </Player>
                     </draggable>
                 </b-card>
             </b-col>
@@ -58,7 +62,10 @@
                                 :key="element.name"
                                 :player="element"
                             >
-                                <template v-slot:badge>{{getRoleFromArrayIndex(index)}}</template>
+                                <template v-slot:badges>
+                                    <list-badge :list="generateBadges(element,index)"></list-badge>
+                                </template>
+                                <!-- <b-badge pill variant="warning">{{getRoleFromArrayIndex(index)}}</b-badge> -->
                             </Player>
                         </draggable>
                         <!-- <h6
@@ -75,6 +82,7 @@ import draggable from "vuedraggable";
 import { XEditable } from "@onekiloparsec/vue-xeditable";
 import Player from "../components/player.vue";
 import KVList from "../components/KVList.vue";
+import ListBadge from "../components/ListBadge.vue";
 
 export default {
     name: "two-lists",
@@ -84,7 +92,8 @@ export default {
         draggable,
         XEditable,
         Player,
-        KVList
+        KVList,
+        ListBadge
     },
     data() {
         const groupsCount = this.$route.params.groupSize || 8;
@@ -126,8 +135,34 @@ export default {
         getRoleFromArrayIndex(index) {
             return this.tierGroup[index] || `T${index - 1}`;
         },
-        hitUserSearch(user){
-          return user.name.toLowerCase().includes(this.searchUserText.toLowerCase())
+        hitUserSearch(user) {
+            return user.name
+                .toLowerCase()
+                .includes(this.searchUserText.toLowerCase());
+        },
+        roleBadgeVariant(index){
+          console.log(index);
+          switch (index) {
+            case 0 :
+              return 'info';
+            case 1:   
+              return "primary";       
+            default:
+              return "secondary";
+          }
+        },
+        roleBadge(roleIndex) {
+            const role = this.getRoleFromArrayIndex(roleIndex);
+            return {
+                variant: this.roleBadgeVariant(roleIndex),
+                content: role
+            };
+        },
+        generateBadges(player, roleIndex) {
+            const badges = [];
+            badges.push({ pill: true, content: `${player.elo} elo` });
+            if (roleIndex !== undefined) badges.push(this.roleBadge(roleIndex));
+            return badges;
         }
     }
 };
