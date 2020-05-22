@@ -8,7 +8,7 @@
                     </template>
                     <b-form-input
                         v-model="searchUserText"
-                        placeholder="Enter your name"
+                        placeholder="Find Player..."
                         style="background-color: var(--light); color: var(--input); backdrop-filter: blur(10px);"
                     ></b-form-input>
                     <draggable

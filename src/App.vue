@@ -2,16 +2,17 @@
     <div id="app" class="themedark">
         <!-- 留坑，非常重要 -->
         <router-view></router-view>
+        <bottom></bottom>
     </div>
 </template>
 <script>
-// import bottom from "./components/bottom";
+import bottom from "./components/hideBottom.vue";
 export default {
     data() {
         return {};
     },
     components: {
-        // bottom,
+        bottom,
     }
 };
 </script>
