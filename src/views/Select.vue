@@ -36,7 +36,7 @@
                 <b-card-group deck>
                     <b-card
                         no-body
-                        style="min-width: 15rem;"
+                        style="min-width: 20rem;"
                         v-for="(list,index) in groups"
                         :list="list"
                         :key="index"

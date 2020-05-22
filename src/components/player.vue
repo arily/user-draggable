@@ -34,7 +34,7 @@ export default {
     padding-bottom: 0.4rem;
 }
 .list-group-item {
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     background-color: var(--dark);
 }
 </style>
