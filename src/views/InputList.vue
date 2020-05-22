@@ -28,16 +28,19 @@
                 <b-form-invalid-feedback :state="groupSizeState">需要大于1！</b-form-invalid-feedback>
             </b-form-group>
         </form>
-        <span v-if="loading">
-            <h4>
-                <b-spinner></b-spinner>
-                Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
-            </h4>
-        </span>
+        <!-- <span v-if="loading">
+
+        </span>-->
         <b-button-group class="mb-2">
             <b-button @click.prevent="idList" variant="light">手动触发列表更新!!</b-button>
-            <b-button @click.prevent="toSelect" :disabled="!ready" variant="success">去分组11111</b-button>
+            <b-button @click.prevent="toSelect" :disabled="!ready" variant="success" id="buttonsForSelect">去分组11111</b-button>
         </b-button-group>
+        <b-tooltip target="buttonsForSelect" :show.sync="loading">
+            <h6 class="d-flex align-self-center">
+                <b-spinner small></b-spinner>
+                Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
+            </h6>
+        </b-tooltip>
         <b-row>
             <b-col v-for="(chunk,index) in forShow_Chunked" :key="`player-chunk-${index}`">
                 <b-list-group>
