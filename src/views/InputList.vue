@@ -35,7 +35,7 @@
             <b-button @click.prevent="idList" variant="light">手动触发列表更新!!</b-button>
             <b-button @click.prevent="toSelect" :disabled="!ready" variant="success" id="buttonsForSelect">去分组11111</b-button>
         </b-button-group>
-        <b-tooltip target="buttonsForSelect" :show.sync="loading">
+        <b-tooltip target="buttonsForSelect" :show.sync="loading" triggers="manual">
             <h6 class="d-flex align-self-center">
                 <b-spinner small></b-spinner>
                 Loading...({{this.forShow_Listed.length}} / {{this.idList.length}})
