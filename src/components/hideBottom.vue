@@ -37,9 +37,10 @@
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
-    height:110px;
+    bottom: -20px;
+    height: 110px;
     margin: auto;
+    pointer-events: none;
 }
 .waveWrapperInner {
     position: absolute;
@@ -67,7 +68,7 @@
     background-repeat: repeat no-repeat;
     background-position: 0 bottom;
     transform-origin: center bottom;
-    filter: contrast(0%) brightness(0.4);;
+    filter: contrast(0%) brightness(0.4);
 }
 .waveTop {
     background-size: 50% 100px;
