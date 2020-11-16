@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="themedark">
+    <div id="app">
         <!-- 留坑，非常重要 -->
         <router-view></router-view>
         <bottom></bottom>
@@ -17,11 +17,15 @@ export default {
 };
 </script>
 <style>
+body {
+    background-color: var(--bg-color) !important;
+}
+
 body::before {
     content: "";
-    background: black;
-    background-image: url("../src/assets/background-min.png");
-    background-blend-mode: lighten;
+    /* background-image: url("../src/assets/background-min.png"); */
+    background-color: var(--dark) !important;
+    /* background-blend-mode: lighten;
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -29,8 +33,8 @@ body::before {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: fixed; */
 
-    filter: contrast(70%) brightness(20%) blur(10px);
+    /* filter: contrast(50%) brightness(200%) blur(10px); */
 }
 </style>

@@ -68,7 +68,7 @@
     background-repeat: repeat no-repeat;
     background-position: 0 bottom;
     transform-origin: center bottom;
-    filter: contrast(0%) brightness(0.4);
+    filter: saturate(0%);
 }
 .waveTop {
     background-size: 50% 100px;
